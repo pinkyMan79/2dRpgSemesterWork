@@ -55,7 +55,7 @@ public class BaseScreen {
                     // 7 here is like base num mask from 8(1000) -> 7(0111)
                     int sheetPixel = ((y + yOffset) & (16 - 1)) * this.spriteSheet.getWidth()
                             + ((xMin + xOffset) & (16 - 1));
-                    int tilePixel = xOffset + xMin + (y * row);
+                    int tilePixel = offset + xMin + (y * row);
                     for (int x = xMin; x < xMax; x++) {
                         int colour = tileIndex * 4 + spriteSheet.getPixelData()[sheetPixel++];
                         pxData[tilePixel++] = colours[colour];

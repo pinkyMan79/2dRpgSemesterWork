@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import one.terenin.dev.graphics.BaseScreen;
 import one.terenin.dev.graphics.SpriteSheet;
+import one.terenin.dev.listeners.InputListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,8 @@ public class MyGame extends Canvas implements Runnable{
     private BaseScreen screen;
     private int ticksCount = 0;
 
+    private InputListener inputListener;
+
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private int[] pixelsBuffer = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 
@@ -48,7 +51,8 @@ public class MyGame extends Canvas implements Runnable{
     }
 
     public void initScreen(){
-        screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/MiniWorldSprites/Characters/Monsters/Demons/ArmouredRedDemon.png"));
+        screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/MiniWorldSprites/Characters/Champions/Arthax.png"));
+        inputListener = new InputListener(this);
     }
 
     private synchronized void start() {
@@ -62,10 +66,10 @@ public class MyGame extends Canvas implements Runnable{
 
     public void tickListener(){
         ticksCount++;
-        for (int i = 0; i < pixelsBuffer.length; i++) {
-            pixelsBuffer[i] = i * ticksCount;
-            //pixelsBuffer[i] = i + ticksCount;
-        }
+        if (inputListener.up.isPressed()){screen.yOffset -- ;}
+        if (inputListener.down.isPressed()){screen.yOffset ++ ;}
+        if (inputListener.left.isPressed()){screen.yOffset -- ;}
+        if (inputListener.right.isPressed()){screen.yOffset ++ ;}
     }
 
     public void render(){
@@ -89,7 +93,7 @@ public class MyGame extends Canvas implements Runnable{
     public void run() {
         // here is logic like thread sleep, but it without sleeping just stop the render by ticks, thread be available always
         long nanoTickTime = System.nanoTime();
-        double nanoSecondsPerTick = 10000000D / 60D;
+        double nanoSecondsPerTick = 10000000D / (60D);
         int frames = 0;
         int ticks = 0;
         initScreen();
@@ -107,14 +111,10 @@ public class MyGame extends Canvas implements Runnable{
                 delta -= 1;
                 makeRender = true;
             }
-
-           // Thread.sleep(2);
-
             if(makeRender){
                 frames++;
                 render();
             }
-
             if (System.currentTimeMillis() - lastTimeInMillis > 1000){
                 lastTimeInMillis += 1000;
                 System.out.println(frames + " " + ticks);

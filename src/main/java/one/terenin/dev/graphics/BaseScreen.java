@@ -8,8 +8,9 @@ public class BaseScreen {
     public static final int M_WIDTH = 64;
     public static final int M_WIDTH_MASK = M_WIDTH - 1;
 
-    private int[] tiles = new int[(int) Math.pow(M_WIDTH, 2)];
-    private int[] colours = new int[(int) Math.pow(M_WIDTH, 2) * 4]; // because we have got 3 base colors plus alpha and our tile need to have an information 4 bits of coded colour
+    //private int[] tiles = new int[(int) Math.pow(M_WIDTH, 2)];
+    //private int[] colours = new int[(int) Math.pow(M_WIDTH, 2) * 4]; // because we have got 3 base colors plus alpha and our tile need to have an information 4 bits of coded colour
+    public int[] pixels;
 
     public int xOffset = 0; // camera offsets
     public int yOffset = 0;
@@ -25,15 +26,18 @@ public class BaseScreen {
         this.spriteSheet = spriteSheet;
 
         // here is the base colour binding
-        for (int i = 0; i < M_WIDTH * M_WIDTH; i++) {
+        /*for (int i = 0; i < M_WIDTH * M_WIDTH; i++) {
 
             colours[(i * 4)] = 0xFF00FF;
             colours[(i * 4)+1] = 0x00FFFF;
             colours[(i * 4)+2] = 0xFFFF00;
             colours[(i * 4)+3] = 0xFFFFFF;
-        }
+        }*/
+
+        pixels = new int[width*height];
     }
 
+    /*// v1 render
     public void render(int[] pxData, int offset, int row) {
 
         // <<4 can be explain like a moving a point for 4 bits 0010 << 4 == 0010_0000  -> yOffset / 2^4
@@ -65,6 +69,28 @@ public class BaseScreen {
             }
         }
 
+    }
+*/
+    // version 2 render
+    public void render(int x, int y, int tileIndex, int colour){
+        x -= xOffset;
+        y -= yOffset;
+        int xTileIndex = tileIndex % 64; // % 64 for cutting off by x
+        int yTileIndex = tileIndex / 64; // / 64 for cutting off by y
+        int tileOffset = (xTileIndex << 4) + (yTileIndex << 4) * spriteSheet.getWidth();
+        // ahh shit... here we go again
+        for (int yc = 0; yc < 16; yc++) {
+            if (yc + y < 0 || yc + y >= height) continue;
+            int ySheet = yc;
+            for (int xc = 0; xc < 16; xc++) {
+                if (xc + x < 0 || xc + x >= width) continue;
+                int xSheet = xc;
+                int colourBit = (colour >> (spriteSheet.getPixelData()[xSheet + ySheet * spriteSheet.getWidth() + tileOffset] * 8)) & 255;
+                if (colourBit < 255){
+                    pixels[xc + x + (yc + y) * width] = colourBit;
+                }
+            }
+        }
     }
 
 }

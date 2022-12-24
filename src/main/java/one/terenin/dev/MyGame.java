@@ -3,6 +3,7 @@ package one.terenin.dev;
 import lombok.Data;
 import lombok.SneakyThrows;
 import one.terenin.dev.graphics.BaseScreen;
+import one.terenin.dev.graphics.ColourClass;
 import one.terenin.dev.graphics.SpriteSheet;
 import one.terenin.dev.listeners.InputListener;
 
@@ -33,6 +34,8 @@ public class MyGame extends Canvas implements Runnable{
 
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private int[] pixelsBuffer = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+    private int[] colours = new int[216];
+
 
     public MyGame(){
         setMinimumSize(new Dimension(WIDTH*SCALE, HEIGHT * SCALE));
@@ -51,6 +54,23 @@ public class MyGame extends Canvas implements Runnable{
     }
 
     public void initScreen(){
+        int index = 0;
+        for (int r = 0; r < 6; r++) {
+            for (int g = 0; g < 6; g++) {
+                for (int b = 0; b < 6; b++) {
+                    int red = r * 255 / 5;
+                    int green = g * 255 / 5;
+                    int blue = b * 255 / 5;
+                    colours[index++] = red << 16 | green << 8 | blue;
+                    /**
+                     * explain of this part are pretty simple
+                     * we've got 6 colors, but mask of this is 5 and to get the right color we take the base FFFFFF(255) and divide it by mask
+                     * colours[index++] = r << 16 | g << 8 | b
+                     * Here is we've got a 2 bits for every color rrggbb(2^4) and the rr -> (rr_gggbb, we make сдвиг on 2 last bits, it is similar for gg and bb) and to right divide the data we need to make сдвиг*/
+                }
+            }
+        }
+
         screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/MiniWorldSprites/Characters/Champions/Arthax.png"));
         inputListener = new InputListener(this);
     }
@@ -78,7 +98,19 @@ public class MyGame extends Canvas implements Runnable{
             createBufferStrategy(3);
             return;
         }
-        screen.render(pixelsBuffer, 0, WIDTH);
+        //screen.render(pixelsBuffer, 0, WIDTH);
+
+        for (int y = 0; y < 64; y++) {
+            for (int x = 0; x < 64; x++) {
+                screen.render(x << 4, y << 4, 0, ColourClass.get(555, 505, 050, 005));
+            }
+        }
+        for (int y = 0; y < screen.getHeight(); y++) {
+            for (int x = 0; x < screen.getWidth(); x++) {
+                int colourCode = screen.pixels[x + y * screen.getWidth()];
+                if (colourCode < 255) pixelsBuffer[x + y * WIDTH] = colours[colourCode];
+            }
+        }
 
         Graphics graphics = bufferStrategy.getDrawGraphics();
         graphics.setColor(Color.BLACK);

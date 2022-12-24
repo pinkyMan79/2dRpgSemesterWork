@@ -2,6 +2,7 @@ package one.terenin.dev;
 
 import lombok.Data;
 import lombok.SneakyThrows;
+import one.terenin.dev.graphics.BaseScreen;
 import one.terenin.dev.graphics.SpriteSheet;
 
 import javax.swing.*;
@@ -23,8 +24,8 @@ public class MyGame extends Canvas implements Runnable{
 
     private JFrame frame;
 
-    private SpriteSheet emptyBlock = new SpriteSheet("/");
-
+    //private SpriteSheet emptyBlock = new SpriteSheet("/");
+    private BaseScreen screen;
     private int ticksCount = 0;
 
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -44,6 +45,10 @@ public class MyGame extends Canvas implements Runnable{
         frame.setResizable(false);
         frame.setVisible(true);
 
+    }
+
+    public void initScreen(){
+        screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/MiniWorldSprites/Characters/Monsters/Demons/ArmouredRedDemon.png"));
     }
 
     private synchronized void start() {
@@ -69,6 +74,8 @@ public class MyGame extends Canvas implements Runnable{
             createBufferStrategy(3);
             return;
         }
+        screen.render(pixelsBuffer, 0, WIDTH);
+
         Graphics graphics = bufferStrategy.getDrawGraphics();
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0,0, getWidth(), getHeight());
@@ -85,7 +92,7 @@ public class MyGame extends Canvas implements Runnable{
         double nanoSecondsPerTick = 10000000D / 60D;
         int frames = 0;
         int ticks = 0;
-
+        initScreen();
         long lastTimeInMillis = System.currentTimeMillis();
         double delta = 0;
 

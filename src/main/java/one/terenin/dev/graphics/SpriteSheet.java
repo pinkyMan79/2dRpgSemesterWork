@@ -35,7 +35,7 @@ public class SpriteSheet {
         if (image == null) return;
         this.width = image.getWidth();
         this.height = image.getHeight();
-        image.getRGB(0, 0, width, height, pixelData, 0, width);
+        pixelData = image.getRGB(0, 0, width, height, null, 0, width);
         // for diff color data we use -> AARRGGBB a - alpha, r - red, g - green, b - blue it is can be interpreted  like a 0xFFFFFFFF
         for (int i = 0; i < pixelData.length; i++) {
             pixelData[i] = (pixelData[i] & 0xFF)/64; // cut off alpha prefix and 64 -> (255/4) ~ 64

@@ -68,8 +68,8 @@ public class MyGame extends Canvas implements Runnable{
         ticksCount++;
         if (inputListener.up.isPressed()){screen.yOffset -- ;}
         if (inputListener.down.isPressed()){screen.yOffset ++ ;}
-        if (inputListener.left.isPressed()){screen.yOffset -- ;}
-        if (inputListener.right.isPressed()){screen.yOffset ++ ;}
+        if (inputListener.left.isPressed()){screen.xOffset -- ;}
+        if (inputListener.right.isPressed()){screen.xOffset ++ ;}
     }
 
     public void render(){

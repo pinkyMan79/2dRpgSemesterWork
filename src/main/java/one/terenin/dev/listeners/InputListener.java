@@ -33,7 +33,7 @@ public class InputListener implements KeyListener{
 
     @Override
     public void keyReleased(KeyEvent e) {
-        toggle(e.getKeyCode(), true);
+        toggle(e.getKeyCode(), false);
     }
 
     public void toggle(int keycode, boolean isPressed){

@@ -43,8 +43,8 @@ public class BaseScreen {
             if (yMin < 0) yMin = 0;
             if (yMax > height) yMax = height;
 
-            for (int xt = yOffset >> 4; xt <= (xOffset + width) >> 4; xt++) {
-                int xMin = (xt * 16) - yOffset;
+            for (int xt = xOffset >> 4; xt <= (xOffset + width) >> 4; xt++) {
+                int xMin = (xt * 16) - xOffset;
                 int xMax = xMin + 16;
                 if (xMin < 0) xMin = 0;
                 if (xMax > width) xMax = width;
@@ -52,7 +52,7 @@ public class BaseScreen {
                 int tileIndex = (xt & M_WIDTH_MASK) + (yt & M_WIDTH_MASK) * M_WIDTH;
 
                 for (int y = yMin; y < yMax; y++) {
-                    // 7 here is like base num mask from 8(1000) -> 7(0111)
+                    // 16 here is like base num mask from 16(10000) -> 15(01111)
                     int sheetPixel = ((y + yOffset) & (16 - 1)) * this.spriteSheet.getWidth()
                             + ((xMin + xOffset) & (16 - 1));
                     int tilePixel = offset + xMin + (y * row);

@@ -72,7 +72,7 @@ public class BaseScreen {
     }
 */
     // version 2 render
-    public void render(int x, int y, int tileIndex, int colour){
+    public void render(int x, int y, int tileIndex, int colour, boolean xmirroroing, boolean ymirroring){
         x -= xOffset;
         y -= yOffset;
         int xTileIndex = tileIndex % 64; // % 64 for cutting off by x
@@ -80,11 +80,36 @@ public class BaseScreen {
         int tileOffset = (xTileIndex << 4) + (yTileIndex << 4) * spriteSheet.getWidth();
         // ahh shit... here we go again
         for (int yc = 0; yc < 16; yc++) {
-            if (yc + y < 0 || yc + y >= height) continue;
             int ySheet = yc;
+            if (ymirroring) ySheet = 15 - yc; // inverse image here
+            if (yc + y < 0 || yc + y >= height) continue;
             for (int xc = 0; xc < 16; xc++) {
-                if (xc + x < 0 || xc + x >= width) continue;
                 int xSheet = xc;
+                if (xmirroroing) xSheet = 15 - xc;
+                if (xc + x < 0 || xc + x >= width) continue;
+                int colourBit = (colour >> (spriteSheet.getPixelData()[xSheet + ySheet * spriteSheet.getWidth() + tileOffset] * 8)) & 255;
+                if (colourBit < 255){
+                    pixels[xc + x + (yc + y) * width] = colourBit;
+                }
+            }
+        }
+    }
+
+    public void fontRender(int x, int y, int tileIndex, int colour, boolean xmirroroing, boolean ymirroring){
+        x -= xOffset;
+        y -= yOffset;
+        int xTileIndex = tileIndex % 32; // % 64 for cutting off by x
+        int yTileIndex = tileIndex / 32; // / 64 for cutting off by y
+        int tileOffset = (xTileIndex << 3) + (yTileIndex << 3) * spriteSheet.getWidth();
+        // ahh shit... here we go again
+        for (int yc = 0; yc < 8; yc++) {
+            int ySheet = yc;
+            if (ymirroring) ySheet = 7 - yc; // inverse image here
+            if (yc + y < 0 || yc + y >= height) continue;
+            for (int xc = 0; xc < 8; xc++) {
+                int xSheet = xc;
+                if (xmirroroing) xSheet = 7 - xc;
+                if (xc + x < 0 || xc + x >= width) continue;
                 int colourBit = (colour >> (spriteSheet.getPixelData()[xSheet + ySheet * spriteSheet.getWidth() + tileOffset] * 8)) & 255;
                 if (colourBit < 255){
                     pixels[xc + x + (yc + y) * width] = colourBit;

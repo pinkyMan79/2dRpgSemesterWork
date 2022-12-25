@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import one.terenin.dev.graphics.BaseScreen;
 import one.terenin.dev.graphics.ColourClass;
 import one.terenin.dev.graphics.SpriteSheet;
+import one.terenin.dev.graphics.util.Fonts;
 import one.terenin.dev.listeners.InputListener;
 
 import javax.swing.*;
@@ -71,7 +72,7 @@ public class MyGame extends Canvas implements Runnable{
             }
         }
 
-        screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/MiniWorldSprites/Characters/Champions/Arthax.png"));
+        screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/img.png"));
         inputListener = new InputListener(this);
     }
 
@@ -100,17 +101,30 @@ public class MyGame extends Canvas implements Runnable{
         }
         //screen.render(pixelsBuffer, 0, WIDTH);
 
+        /*for (int y = 0; y < 64; y++) {
+            for (int x = 0; x < 64; x++) {
+                // take the pixel value by <<4
+                screen.render(x << 4, y << 4, 0, ColourClass.get(555, 505, 055, 550), false, false);
+            }
+        }*/
+
         for (int y = 0; y < 64; y++) {
             for (int x = 0; x < 64; x++) {
-                screen.render(x << 4, y << 4, 0, ColourClass.get(555, 505, 050, 005));
+                // take the pixel value by <<4
+                screen.render(x << 4, y << 4, 0, ColourClass.get(555, 505, 055, 550), false, false);
             }
         }
+
+        String msg = "It is my Game Engine";
+        Fonts.render(msg, screen, screen.xOffset + screen.getWidth() / 2 - msg.length()*4, screen.yOffset + screen.getHeight() / 2, ColourClass.get(000, -1, -1, 500));
+
         for (int y = 0; y < screen.getHeight(); y++) {
             for (int x = 0; x < screen.getWidth(); x++) {
                 int colourCode = screen.pixels[x + y * screen.getWidth()];
                 if (colourCode < 255) pixelsBuffer[x + y * WIDTH] = colours[colourCode];
             }
         }
+
 
         Graphics graphics = bufferStrategy.getDrawGraphics();
         graphics.setColor(Color.BLACK);
@@ -125,7 +139,7 @@ public class MyGame extends Canvas implements Runnable{
     public void run() {
         // here is logic like thread sleep, but it without sleeping just stop the render by ticks, thread be available always
         long nanoTickTime = System.nanoTime();
-        double nanoSecondsPerTick = 10000000D / (60D);
+        double nanoSecondsPerTick = 10000000D / (25D);
         int frames = 0;
         int ticks = 0;
         initScreen();

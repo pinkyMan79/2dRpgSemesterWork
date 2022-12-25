@@ -58,7 +58,7 @@ public class BaseLevel {
 
     public void renderEntities(BaseScreen screen){
         for (Entity entity: entities) {
-            entity.render(screen);
+            entity.render(screen );
         }
     }
 

@@ -11,6 +11,8 @@ public class Player extends Mob{
 
     int colour = ColourClass.get(-1, 111 ,145 ,543);
 
+    private int scale = 2;
+
     public Player(BaseLevel level, int x, int y, InputListener input) {
         super(level, "Vasily", x, y, 1);
         this.input = input;
@@ -23,10 +25,10 @@ public class Player extends Mob{
         int multiplier = 8 * scale;
         int xOffset = x - multiplier/2;
         int yOffset = y - multiplier/2 - 4;
-        screen.render(xOffset, yOffset, xTile + yTile * 32, colour, false, false );
-        screen.render(xOffset + multiplier, yOffset, 1 +xTile + yTile * 32, colour, false, false );
-        screen.render(xOffset, yOffset + multiplier, xTile + (yTile + 1) * 32, colour, false, false );
-        screen.render(xOffset + multiplier, yOffset + multiplier, (xTile + 1) + (yTile + 1) * 32, colour, false, false );
+        screen.render(xOffset, yOffset, xTile + yTile * 32, colour, false, false, scale );
+        screen.render(xOffset + multiplier, yOffset, 1 +xTile + yTile * 32, colour, false, false, scale );
+        screen.render(xOffset, yOffset + multiplier, xTile + (yTile + 1) * 32, colour, false, false, scale );
+        screen.render(xOffset + multiplier, yOffset + multiplier, (xTile + 1) + (yTile + 1) * 32, colour, false, false, scale );
     }
 
     @Override

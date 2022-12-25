@@ -119,7 +119,7 @@ public class MyGame extends Canvas implements Runnable{
                 colour = ColourClass.get(-1,-1,-1,500);
             }
             String msg = "And GRASS";
-            Fonts.render((x % 10) + "", screen, screen.xOffset + screen.getWidth() / 2 - msg.length()*4, screen.yOffset + screen.getHeight() / 2, colour );
+            Fonts.render((x % 10) + "", screen, screen.xOffset + screen.getWidth() / 2 - msg.length()*4, screen.yOffset + screen.getHeight() / 2, colour, 1);
         }
 
         level.renderEntities(screen);
@@ -164,7 +164,7 @@ public class MyGame extends Canvas implements Runnable{
     public void run() {
         // here is logic like thread sleep, but it without sleeping just stop the render by ticks, thread be available always
         long nanoTickTime = System.nanoTime();
-        double nanoSecondsPerTick = 100000000D / (60D);
+        double nanoSecondsPerTick = 10000000D / (25D);
         int frames = 0;
         int ticks = 0;
         initScreen();

@@ -2,10 +2,12 @@ package one.terenin.dev;
 
 import lombok.Data;
 import lombok.SneakyThrows;
+import one.terenin.dev.entities.Player;
 import one.terenin.dev.graphics.BaseScreen;
 import one.terenin.dev.graphics.ColourClass;
 import one.terenin.dev.graphics.SpriteSheet;
 import one.terenin.dev.graphics.util.Fonts;
+import one.terenin.dev.levels.BaseLevel;
 import one.terenin.dev.listeners.InputListener;
 
 import javax.swing.*;
@@ -29,6 +31,7 @@ public class MyGame extends Canvas implements Runnable{
 
     //private SpriteSheet emptyBlock = new SpriteSheet("/");
     private BaseScreen screen;
+    private BaseScreen fontScreen;
     private int ticksCount = 0;
 
     private InputListener inputListener;
@@ -37,6 +40,9 @@ public class MyGame extends Canvas implements Runnable{
     private int[] pixelsBuffer = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
     private int[] colours = new int[216];
 
+    public BaseLevel level;
+
+    public Player player;
 
     public MyGame(){
         setMinimumSize(new Dimension(WIDTH*SCALE, HEIGHT * SCALE));
@@ -74,6 +80,9 @@ public class MyGame extends Canvas implements Runnable{
 
         screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/img.png"));
         inputListener = new InputListener(this);
+        level = new BaseLevel(64, 64);
+        player = new Player(level, 0, 0, inputListener);
+        level.addEntity(player);
     }
 
     private synchronized void start() {
@@ -87,11 +96,10 @@ public class MyGame extends Canvas implements Runnable{
 
     public void tickListener(){
         ticksCount++;
-        if (inputListener.up.isPressed()){screen.yOffset -- ;}
-        if (inputListener.down.isPressed()){screen.yOffset ++ ;}
-        if (inputListener.left.isPressed()){screen.xOffset -- ;}
-        if (inputListener.right.isPressed()){screen.xOffset ++ ;}
+        level.tick();
     }
+
+    private int x = 0, y = 0;
 
     public void render(){
         BufferStrategy bufferStrategy = getBufferStrategy();
@@ -99,6 +107,23 @@ public class MyGame extends Canvas implements Runnable{
             createBufferStrategy(3);
             return;
         }
+
+        int xOffset = player.x - (screen.getWidth() / 2);
+        int yOffset = player.y - (screen.getHeight() / 2);
+
+        level.renderTiles(screen, xOffset, yOffset);
+
+        for (int x = 0; x < level.getWidth(); x++) {
+            int colour = ColourClass.get(-1,-1,-1,000);
+            if (x % 10 == 0 && x != 0){
+                colour = ColourClass.get(-1,-1,-1,500);
+            }
+            String msg = "And GRASS";
+            Fonts.render((x % 10) + "", screen, screen.xOffset + screen.getWidth() / 2 - msg.length()*4, screen.yOffset + screen.getHeight() / 2, colour );
+        }
+
+        level.renderEntities(screen);
+
         //screen.render(pixelsBuffer, 0, WIDTH);
 
         /*for (int y = 0; y < 64; y++) {
@@ -108,16 +133,16 @@ public class MyGame extends Canvas implements Runnable{
             }
         }*/
 
-        for (int y = 0; y < 64; y++) {
-            for (int x = 0; x < 64; x++) {
+        /*for (int y = 0; y < 32; y++) {
+            for (int x = 0; x < 32; x++) {
                 // take the pixel value by <<4
-                screen.render(x << 4, y << 4, 0, ColourClass.get(555, 505, 055, 550), false, false);
+                screen.render(x << 3, y << 3, 0, ColourClass.get(555, 505, 055, 550), false, false);
             }
-        }
+        }*/
 
-        String msg = "It is my Game Engine";
+       /* String msg = "It is my Game Engine";
         Fonts.render(msg, screen, screen.xOffset + screen.getWidth() / 2 - msg.length()*4, screen.yOffset + screen.getHeight() / 2, ColourClass.get(000, -1, -1, 500));
-
+*/
         for (int y = 0; y < screen.getHeight(); y++) {
             for (int x = 0; x < screen.getWidth(); x++) {
                 int colourCode = screen.pixels[x + y * screen.getWidth()];
@@ -139,7 +164,7 @@ public class MyGame extends Canvas implements Runnable{
     public void run() {
         // here is logic like thread sleep, but it without sleeping just stop the render by ticks, thread be available always
         long nanoTickTime = System.nanoTime();
-        double nanoSecondsPerTick = 10000000D / (25D);
+        double nanoSecondsPerTick = 100000000D / (60D);
         int frames = 0;
         int ticks = 0;
         initScreen();

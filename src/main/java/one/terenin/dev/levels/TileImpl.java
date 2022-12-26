@@ -15,7 +15,7 @@ public class TileImpl extends Tile {
 
     @Override
     public void render(BaseScreen screen, BaseLevel baseLevel, int x, int y) {
-        screen.render(x, y, tileId, tileColour, false, false, 1);
+        screen.render(x, y, tileId, tileColour, 0, 1);
     }
 
     public int getTileId() {

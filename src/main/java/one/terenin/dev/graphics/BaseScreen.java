@@ -8,6 +8,9 @@ public class BaseScreen {
     public static final int M_WIDTH = 64;
     public static final int M_WIDTH_MASK = M_WIDTH - 1;
 
+    private final byte BIT_MIRRORING_X = 0x01;
+    private final byte BIT_MIRRORING_Y = 0x02;
+
     //private int[] tiles = new int[(int) Math.pow(M_WIDTH, 2)];
     //private int[] colours = new int[(int) Math.pow(M_WIDTH, 2) * 4]; // because we have got 3 base colors plus alpha and our tile need to have an information 4 bits of coded colour
     public int[] pixels;
@@ -72,9 +75,11 @@ public class BaseScreen {
     }
 */
     // version 2 render x, y -> sprite block coordinates
-    public void render(int x, int y, int tileIndex, int colour, boolean xmirroroing, boolean ymirroring, int scale){
+    public void render(int x, int y, int tileIndex, int colour, int mirrorDirection, int scale){
         x -= xOffset;
         y -= yOffset;
+        boolean xmirroroing = (mirrorDirection & BIT_MIRRORING_X) > 0;
+        boolean ymirroring = (mirrorDirection & BIT_MIRRORING_Y) > 0;
         int scaleMapping = scale - 1;
         int xTileIndex = tileIndex % 32; // % 64 for cutting off by x
         int yTileIndex = tileIndex / 32; // / 64 for cutting off by y

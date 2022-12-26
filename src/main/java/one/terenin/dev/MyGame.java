@@ -113,14 +113,14 @@ public class MyGame extends Canvas implements Runnable{
 
         level.renderTiles(screen, xOffset, yOffset);
 
-        for (int x = 0; x < level.getWidth(); x++) {
+        /*for (int x = 0; x < level.getWidth(); x++) {
             int colour = ColourClass.get(-1,-1,-1,000);
             if (x % 10 == 0 && x != 0){
                 colour = ColourClass.get(-1,-1,-1,500);
             }
             String msg = "And GRASS";
-            Fonts.render((x % 10) + "", screen, screen.xOffset + screen.getWidth() / 2 - msg.length()*4, screen.yOffset + screen.getHeight() / 2, colour, 1);
-        }
+            //Fonts.render((x % 10) + "", screen, screen.xOffset + screen.getWidth() / 2 - msg.length()*4, screen.yOffset + screen.getHeight() / 2, colour, 1);
+        }*/
 
         level.renderEntities(screen);
 
@@ -173,7 +173,7 @@ public class MyGame extends Canvas implements Runnable{
 
         while (isRunning){
             long nowTime = System.nanoTime();
-            delta = (nowTime - nanoTickTime) / nanoSecondsPerTick ;
+            delta = (nowTime - nanoTickTime) / nanoSecondsPerTick / 5 ;
             nanoTickTime = nowTime;
             boolean makeRender = true;
             while (delta >= 1){

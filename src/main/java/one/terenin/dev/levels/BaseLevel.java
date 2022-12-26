@@ -29,9 +29,9 @@ public class BaseLevel {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (x * y % 10 < 5){
-                    tilemap[x + y * width] = Tile.GRASS.getId();
-                }else {
                     tilemap[x + y * width] = Tile.STONE.getId();
+                }else {
+                    tilemap[x + y * width] = Tile.GRASS.getId();
                 }
             }
         }
@@ -60,12 +60,12 @@ public class BaseLevel {
 
     public void renderEntities(BaseScreen screen){
         for (Entity entity: entities) {
-            entity.render(screen );
+            entity.render(screen);
         }
     }
 
     public Tile getTile(int x, int y){
-        if (x < 0 || x > width || y < 0 || y > height){
+        if (x < 0 || x >= width || y < 0 || y >= height){
             return Tile.VOID;
         }
         return Tile.tiles[tilemap[x + y * width]];

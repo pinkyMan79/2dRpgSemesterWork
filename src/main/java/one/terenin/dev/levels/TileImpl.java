@@ -4,13 +4,18 @@ import one.terenin.dev.graphics.BaseScreen;
 
 public class TileImpl extends Tile {
 
-    private int tileId;
-    private final int tileColour;
+    protected int tileId;
+    protected final int tileColour;
 
     public TileImpl(int id, int x, int y, int colour, int levelColour) {
         super(id, false, false, levelColour);
-        this.tileId = x + y;
+        this.tileId = x + y * 32;
         this.tileColour = colour;
+    }
+
+    @Override
+    public void tick() {
+
     }
 
     @Override

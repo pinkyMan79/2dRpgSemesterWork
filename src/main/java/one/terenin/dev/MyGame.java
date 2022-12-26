@@ -29,7 +29,7 @@ public class MyGame extends Canvas implements Runnable{
 
     private JFrame frame;
 
-    public BaseLevel level = new BaseLevel("/testt.png");
+    public BaseLevel level;
     //private SpriteSheet emptyBlock = new SpriteSheet("/");
     private BaseScreen screen;
     private BaseScreen fontScreen;
@@ -78,7 +78,7 @@ public class MyGame extends Canvas implements Runnable{
             }
         }
 
-        level = new BaseLevel("/testt.png");
+        level = new BaseLevel("/myEngine.png");
         screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/img.png"));
         inputListener = new InputListener(this);
         player = new Player(level, 0, 0, inputListener);
@@ -164,7 +164,7 @@ public class MyGame extends Canvas implements Runnable{
     public void run() {
         // here is logic like thread sleep, but it without sleeping just stop the render by ticks, thread be available always
         long nanoTickTime = System.nanoTime();
-        double nanoSecondsPerTick = 10000000D / (25D);
+        double nanoSecondsPerTick = 10000000D / (60D);
         int frames = 0;
         int ticks = 0;
         initScreen();
@@ -173,10 +173,10 @@ public class MyGame extends Canvas implements Runnable{
 
         while (isRunning){
             long nowTime = System.nanoTime();
-            delta = (nowTime - nanoTickTime) / nanoSecondsPerTick / 5 ;
+            delta = (nowTime - nanoTickTime) / nanoSecondsPerTick ;
             nanoTickTime = nowTime;
             boolean makeRender = true;
-            while (delta >= 1){
+            while (delta > 1){
                 ticks++;
                 tickListener();
                 delta -= 1;

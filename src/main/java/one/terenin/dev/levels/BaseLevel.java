@@ -88,6 +88,12 @@ public class BaseLevel {
         for (Entity entity: entities) {
             entity.tick();
         }
+
+        for (Tile tile: Tile.tiles) {
+            if (tile == null) break;
+            tile.tick();
+        }
+
     }
 
     // here in choosing the sprite by x,y offsets and render it from screen class to the frame

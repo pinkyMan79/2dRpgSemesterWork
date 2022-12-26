@@ -18,6 +18,7 @@ public class Player extends Mob{
         this.input = input;
     }
 
+    // so, i ve got 8 by 8 render arean and to render the full sprite wich is 16 on 16 and thats because i render 4 times
     @Override
     public void render(BaseScreen screen) {
         int xTile = 0;
@@ -31,6 +32,7 @@ public class Player extends Mob{
         screen.render(xOffset + multiplier, yOffset + multiplier, (xTile + 1) + (yTile + 1) * 32, colour, false, false, scale );
     }
 
+    // by tick i got the playerr moving on the frame
     @Override
     public void tick() {
         int xa = 0;

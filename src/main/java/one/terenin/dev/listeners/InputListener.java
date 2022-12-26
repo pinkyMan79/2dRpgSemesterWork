@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
+// I think it is nothing to explain here
 public class InputListener implements KeyListener{
 
     List<Key> keys = new ArrayList<>();

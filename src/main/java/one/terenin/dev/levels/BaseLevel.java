@@ -24,6 +24,7 @@ public class BaseLevel {
         generateLevel();
     }
 
+    //
     public void generateLevel(){
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -42,6 +43,7 @@ public class BaseLevel {
         }
     }
 
+    // here in choosing the sprite by x,y offsets and render it from screen class to the frame
     public void renderTiles(BaseScreen screen, int xOffset, int yOffset){
         if (xOffset < 0) xOffset=0;
         if (xOffset > (width << 3)- screen.getWidth()) xOffset= (width << 3)- screen.getWidth();

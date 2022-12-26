@@ -71,7 +71,7 @@ public class BaseScreen {
 
     }
 */
-    // version 2 render
+    // version 2 render x, y -> sprite block coordinates
     public void render(int x, int y, int tileIndex, int colour, boolean xmirroroing, boolean ymirroring, int scale){
         x -= xOffset;
         y -= yOffset;

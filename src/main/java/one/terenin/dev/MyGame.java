@@ -9,12 +9,15 @@ import one.terenin.dev.graphics.SpriteSheet;
 import one.terenin.dev.graphics.util.Fonts;
 import one.terenin.dev.levels.BaseLevel;
 import one.terenin.dev.listeners.InputListener;
+import one.terenin.dev.udp_net.client.MyGameClient;
+import one.terenin.dev.udp_net.server.MyGameServer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.nio.charset.StandardCharsets;
 
 @Data
 public class MyGame extends Canvas implements Runnable{
@@ -41,8 +44,10 @@ public class MyGame extends Canvas implements Runnable{
     private int[] pixelsBuffer = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
     private int[] colours = new int[216];
 
-
     public Player player;
+
+    private MyGameClient client;
+    private MyGameServer server;
 
     public MyGame(){
         setMinimumSize(new Dimension(WIDTH*SCALE, HEIGHT * SCALE));
@@ -83,11 +88,20 @@ public class MyGame extends Canvas implements Runnable{
         inputListener = new InputListener(this);
         player = new Player(level, 0, 0, inputListener, JOptionPane.showInputDialog(this,"Input the username"));
         level.addEntity(player);
+        client.sendData("pppp".getBytes());
     }
 
     private synchronized void start() {
         isRunning = true;
         new Thread(this).start();
+
+        if (JOptionPane.showConfirmDialog(this, "uaya?") == 0){
+            server = new MyGameServer(this);
+            server.start();
+        }
+
+        client = new MyGameClient(this, "localhost");
+        client.start();
     }
 
     private synchronized void stop() {

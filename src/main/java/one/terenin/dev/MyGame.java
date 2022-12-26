@@ -29,6 +29,7 @@ public class MyGame extends Canvas implements Runnable{
 
     private JFrame frame;
 
+    public BaseLevel level = new BaseLevel("/testt.png");
     //private SpriteSheet emptyBlock = new SpriteSheet("/");
     private BaseScreen screen;
     private BaseScreen fontScreen;
@@ -40,7 +41,6 @@ public class MyGame extends Canvas implements Runnable{
     private int[] pixelsBuffer = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
     private int[] colours = new int[216];
 
-    public BaseLevel level;
 
     public Player player;
 
@@ -78,9 +78,9 @@ public class MyGame extends Canvas implements Runnable{
             }
         }
 
+        level = new BaseLevel("/testt.png");
         screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/img.png"));
         inputListener = new InputListener(this);
-        level = new BaseLevel(64, 64);
         player = new Player(level, 0, 0, inputListener);
         level.addEntity(player);
     }

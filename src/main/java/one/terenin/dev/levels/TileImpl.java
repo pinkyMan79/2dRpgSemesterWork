@@ -7,8 +7,8 @@ public class TileImpl extends Tile {
     private int tileId;
     private final int tileColour;
 
-    public TileImpl(int id, int x, int y, int colour) {
-        super(id, false, false);
+    public TileImpl(int id, int x, int y, int colour, int levelColour) {
+        super(id, false, false, levelColour);
         this.tileId = x + y;
         this.tileColour = colour;
     }

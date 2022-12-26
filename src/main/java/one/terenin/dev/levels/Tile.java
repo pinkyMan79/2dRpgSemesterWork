@@ -13,7 +13,7 @@ public abstract class Tile {
     public static final Tile VOID = new SolidTile(0, 0, 0, ColourClass.get(000, -1, -1 , -1), 0xFF000000);
     public static final Tile GRASS = new TileImpl(1, 1, 0, ColourClass.get(-1, 444, -1 , -1), 0xFF555555);
     public static final Tile STONE = new SolidTile(2, 2, 0, ColourClass.get(-1, 131, 141 , -1), 0xFF00FF00);
-    public static final Tile WATER = new AnimatedTile(3, new int[][]{{0,5},{1,5},{2,5},{1,5}}, ColourClass.get(-1,004,115,-1), 0xFF0000FF, 1000);
+    public static final Tile WATER = new AnimatedTile(3, new int[][]{{0,5},{1,5},{2,5},{1,5}}, ColourClass.get(-1,004,115,-1), 0xFF0000FF, 500);
 
     private byte id; // id
     protected boolean solid; // is solid

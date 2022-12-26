@@ -81,7 +81,7 @@ public class MyGame extends Canvas implements Runnable{
         level = new BaseLevel("/myEngine.png");
         screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/img.png"));
         inputListener = new InputListener(this);
-        player = new Player(level, 0, 0, inputListener);
+        player = new Player(level, 0, 0, inputListener, JOptionPane.showInputDialog(this,"Input the username"));
         level.addEntity(player);
     }
 

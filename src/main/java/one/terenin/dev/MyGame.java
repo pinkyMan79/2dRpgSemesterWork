@@ -2,6 +2,7 @@ package one.terenin.dev;
 
 import lombok.Data;
 import lombok.SneakyThrows;
+import one.terenin.dev.entities.MultiPlayer;
 import one.terenin.dev.entities.Player;
 import one.terenin.dev.graphics.BaseScreen;
 import one.terenin.dev.graphics.ColourClass;
@@ -9,6 +10,7 @@ import one.terenin.dev.graphics.SpriteSheet;
 import one.terenin.dev.graphics.util.Fonts;
 import one.terenin.dev.levels.BaseLevel;
 import one.terenin.dev.listeners.InputListener;
+import one.terenin.dev.listeners.WindowListener;
 import one.terenin.dev.udp_net.client.MyGameClient;
 import one.terenin.dev.udp_net.packet.PacketLogin;
 import one.terenin.dev.udp_net.server.MyGameServer;
@@ -40,6 +42,7 @@ public class MyGame extends Canvas implements Runnable{
     private int ticksCount = 0;
 
     public InputListener inputListener;
+    public WindowListener windowListener;
 
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private int[] pixelsBuffer = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -47,8 +50,10 @@ public class MyGame extends Canvas implements Runnable{
 
     public Player player;
 
-    private MyGameClient client;
-    private MyGameServer server;
+    public MyGameClient client;
+    public MyGameServer server;
+
+    public static MyGame game;
 
     public MyGame(){
         setMinimumSize(new Dimension(WIDTH*SCALE, HEIGHT * SCALE));
@@ -67,6 +72,7 @@ public class MyGame extends Canvas implements Runnable{
     }
 
     public void initScreen(){
+        game = this;
         int index = 0;
         for (int r = 0; r < 6; r++) {
             for (int g = 0; g < 6; g++) {
@@ -84,13 +90,22 @@ public class MyGame extends Canvas implements Runnable{
             }
         }
 
-        level = new BaseLevel("/myEngine.png");
-        screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/img.png"));
+
+        level = new BaseLevel("/Athored.png");
+        screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/redone.png"));
         inputListener = new InputListener(this);
-        /*player = new Player(level, 0, 0, inputListener, JOptionPane.showInputDialog(this,"Input the username"));
+
+        this.windowListener = new WindowListener(this);
+        player = new MultiPlayer(level, 100, 100, inputListener, JOptionPane.showInputDialog(this,"Input the username"), null, -1);
         level.addEntity(player);
-        client.sendData("pppp".getBytes());*/
-        PacketLogin loginPacket = new PacketLogin(JOptionPane.showInputDialog(this, "Please enter a username"));
+
+        //client.sendData("pppp".getBytes());
+        PacketLogin loginPacket = new PacketLogin(player.getUsername());
+
+        if(server != null){
+            server.addConnection((MultiPlayer) player, loginPacket);
+        }
+
         loginPacket.writeData(client);
     }
 
@@ -181,7 +196,7 @@ public class MyGame extends Canvas implements Runnable{
     public void run() {
         // here is logic like thread sleep, but it without sleeping just stop the render by ticks, thread be available always
         long nanoTickTime = System.nanoTime();
-        double nanoSecondsPerTick = 10000000D / (60D);
+        double nanoSecondsPerTick = 10000000D / (5D);
         int frames = 0;
         int ticks = 0;
         initScreen();

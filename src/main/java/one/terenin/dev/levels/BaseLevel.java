@@ -3,6 +3,7 @@ package one.terenin.dev.levels;
 import lombok.Data;
 import lombok.SneakyThrows;
 import one.terenin.dev.entities.Entity;
+import one.terenin.dev.entities.MultiPlayer;
 import one.terenin.dev.entities.Player;
 import one.terenin.dev.graphics.BaseScreen;
 
@@ -84,7 +85,18 @@ public class BaseLevel {
         }
     }
 
-    public void tick(){
+    public void removeMultiPlayer(String username) {
+        int index = 0;
+        for (Entity e : entities) {
+            if (e instanceof MultiPlayer && ((MultiPlayer) e).getUsername().equals(username)) {
+                break;
+            }
+            index++;
+        }
+        this.entities.remove(index);
+    }
+
+    public synchronized void tick(){
         for (Entity entity: entities) {
             entity.tick();
         }
@@ -127,4 +139,22 @@ public class BaseLevel {
     public void addEntity(Player player) {
         this.entities.add(player);
     }
+
+    private int getMultiPlayerIndex(String username){
+        int index = 0;
+        for (Entity e : entities) {
+            if (e instanceof MultiPlayer && ((MultiPlayer) e).getUsername().equals(username)) {
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    public void movePlayer(String username, int x, int y){
+        int index = getMultiPlayerIndex(username);
+        this.entities.get(index).x = x;
+        this.entities.get(index).y = y;
+    }
+
 }

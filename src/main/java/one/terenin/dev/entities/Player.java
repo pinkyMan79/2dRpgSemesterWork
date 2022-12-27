@@ -1,10 +1,14 @@
 package one.terenin.dev.entities;
 
+import one.terenin.dev.MyGame;
 import one.terenin.dev.graphics.BaseScreen;
 import one.terenin.dev.graphics.ColourClass;
 import one.terenin.dev.graphics.util.Fonts;
 import one.terenin.dev.levels.BaseLevel;
 import one.terenin.dev.listeners.InputListener;
+import one.terenin.dev.udp_net.client.MyGameClient;
+import one.terenin.dev.udp_net.packet.Packet;
+import one.terenin.dev.udp_net.packet.PacketMove;
 
 public class Player extends Mob{
 
@@ -17,6 +21,10 @@ public class Player extends Mob{
     protected boolean isSwimming = false;
 
     private int tickCount = 0;
+
+    public String getUsername() {
+        return username;
+    }
 
     private String username;
 
@@ -88,13 +96,17 @@ public class Player extends Mob{
     public void tick() {
         int xa = 0;
         int ya = 0;
-        if (input.up.isPressed()){ya -- ;}
-        if (input.down.isPressed()){ya ++ ;}
-        if (input.left.isPressed()){xa -- ;}
-        if (input.right.isPressed()){xa ++ ;}
+        if (input != null){
+            if (input.up.isPressed()){ya -- ;}
+            if (input.down.isPressed()){ya ++ ;}
+            if (input.left.isPressed()){xa -- ;}
+            if (input.right.isPressed()){xa ++ ;}
+        }
 
         if ((xa != 0 || ya != 0)  && !hasCollided(xa, ya)){
             move(xa, ya);
+            PacketMove move = new PacketMove(this.getUsername(), this.x, this.y);
+            move.writeData(MyGame.game.getClient());
             isMoving = true;
         }else {
             isMoving = false;

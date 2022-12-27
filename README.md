@@ -5,3 +5,8 @@ In this work I gonna write only on english languge thats like a chalenge for me 
 I hope my comment will be able to understand
 The main idea - online 2d rpg
 Hope you enjoy my project
+
+
+So, why the UDP?
+in my game i am using the UD protocol for networking
+I used it just because in my game losing packets is better than waiting

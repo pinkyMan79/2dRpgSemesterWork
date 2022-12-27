@@ -9,4 +9,4 @@ Hope you enjoy my project
 
 So, why the UDP?
 in my game i am using the UD protocol for networking
-I used it just because in my game losing packets is better than waiting
+I used it just because in my game losing packets is better than waiting and ineed широкополосная отправка пакетов

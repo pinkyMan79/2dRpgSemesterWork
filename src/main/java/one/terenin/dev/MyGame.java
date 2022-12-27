@@ -10,6 +10,7 @@ import one.terenin.dev.graphics.util.Fonts;
 import one.terenin.dev.levels.BaseLevel;
 import one.terenin.dev.listeners.InputListener;
 import one.terenin.dev.udp_net.client.MyGameClient;
+import one.terenin.dev.udp_net.packet.PacketLogin;
 import one.terenin.dev.udp_net.server.MyGameServer;
 
 import javax.swing.*;
@@ -38,7 +39,7 @@ public class MyGame extends Canvas implements Runnable{
     private BaseScreen fontScreen;
     private int ticksCount = 0;
 
-    private InputListener inputListener;
+    public InputListener inputListener;
 
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private int[] pixelsBuffer = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -86,9 +87,11 @@ public class MyGame extends Canvas implements Runnable{
         level = new BaseLevel("/myEngine.png");
         screen = new BaseScreen(WIDTH, HEIGHT, new SpriteSheet("/img.png"));
         inputListener = new InputListener(this);
-        player = new Player(level, 0, 0, inputListener, JOptionPane.showInputDialog(this,"Input the username"));
+        /*player = new Player(level, 0, 0, inputListener, JOptionPane.showInputDialog(this,"Input the username"));
         level.addEntity(player);
-        client.sendData("pppp".getBytes());
+        client.sendData("pppp".getBytes());*/
+        PacketLogin loginPacket = new PacketLogin(JOptionPane.showInputDialog(this, "Please enter a username"));
+        loginPacket.writeData(client);
     }
 
     private synchronized void start() {
